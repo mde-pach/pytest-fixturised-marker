@@ -1,0 +1,99 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pytest-fixturised-marker"
+version = "0.1.0"
+description = "Apply pytest marks to fixtures and let the tests that use them inherit the marks"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.9"
+authors = [{ name = "Maxime de Pachtere" }]
+keywords = ["pytest", "fixtures", "marks", "markers"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: Pytest",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Testing",
+    "Typing :: Typed",
+]
+dependencies = ["pytest>=7.0"]
+
+[project.urls]
+Homepage = "https://github.com/mde-pach/pytest-fixturised-marker"
+Issues = "https://github.com/mde-pach/pytest-fixturised-marker/issues"
+
+[project.entry-points.pytest11]
+fixturised_marker = "pytest_fixturised_marker.plugin"
+
+[dependency-groups]
+dev = ["mypy>=1.11", "ruff>=0.6"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pytest_fixturised_marker"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers --strict-config"
+markers = [
+    "slow: name used by the fixture trees the tests generate",
+    "network: name used by the fixture trees the tests generate",
+]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+target-version = "py39"
+
+[tool.ruff.lint]
+select = [
+    "A",
+    "ARG",
+    "B",
+    "C4",
+    "COM",
+    "E",
+    "F",
+    "FA",
+    "I",
+    "N",
+    "PGH",
+    "PIE",
+    "PT",
+    "PTH",
+    "RET",
+    "RUF",
+    "SIM",
+    "SLF",
+    "T20",
+    "TCH",
+    "TID",
+    "UP",
+    "W",
+]
+ignore = [
+    "COM812",
+    "SLF001",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["ARG001"]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.mypy]
+files = ["src", "tests"]
+strict = true
+warn_unreachable = true
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
