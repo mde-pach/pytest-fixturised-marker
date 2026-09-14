@@ -19,7 +19,7 @@ No configuration: the plugin registers itself.
 ```python
 @pytest.mark.slow
 @pytest.fixture
-def database():
+def database() -> Database:
     return connect_to_the_real_thing()
 ```
 
@@ -37,8 +37,9 @@ Any mark applies, with its arguments:
 ```python
 @pytest.mark.skipif(shutil.which("docker") is None, reason="docker is required")
 @pytest.fixture
-def container():
-    return start_container()
+def container() -> Iterator[Container]:
+    with start_container() as running:
+        yield running
 ```
 
 When a fixture is overridden, the mark follows the definition that actually runs: an override that
@@ -52,7 +53,7 @@ become dependencies of the marked fixture, set up before it.
 ```python
 @pytest.mark.usefixtures("clean_database")
 @pytest.fixture
-def api_client():
+def api_client() -> Client:
     return Client()
 ```
 
@@ -64,7 +65,7 @@ parameter itself.
 ```python
 @pytest.mark.parametrize("backend", ["memory", "disk"])
 @pytest.fixture
-def store(backend):
+def store(backend: str) -> Store:
     return Store(backend)
 ```
 
